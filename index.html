@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WP Design Token Editor</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ui-bg: #f0f0f1;
+      --ui-surface: #ffffff;
+      --ui-border: #dcdcde;
+      --ui-border-strong: #c3c4c7;
+      --ui-text: #1d2327;
+      --ui-text-secondary: #3c434a;
+      --ui-text-muted: #50575e;
+      --ui-text-faint: #8c8f94;
+      --ui-accent: #2271b1;
+      --ui-accent-hover: #135e96;
+      --ui-accent-bg: #f0f6fc;
+      --ui-accent-border: #2271b1;
+      --ui-danger: #b32d2e;
+      --ui-danger-bg: #fcf0f0;
+      --ui-success: #4ab866;
+      --ui-success-bg: #eff9f1;
+      --ui-focus: #2271b1;
+      --ui-focus-width: 1.5px;
+      --ui-radius: 2px;
+      --ui-radius-lg: 4px;
+      --sidebar-w: 320px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      background: var(--ui-bg);
+      color: var(--ui-text-secondary);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      height: 40px;
+      background: var(--ui-surface);
+      border-bottom: 1px solid var(--ui-border);
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topbar-logo {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ui-text);
+    }
+
+    .topbar-logo span {
+      color: var(--ui-accent);
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 0;
+      margin-left: 4px;
+    }
+
+    .tab {
+      padding: 4px 10px;
+      border-radius: var(--ui-radius);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ui-text-muted);
+      transition: none;
+    }
+
+    .tab.active {
+      background: var(--ui-accent-bg);
+      color: var(--ui-accent);
+      border-color: var(--ui-accent);
+    }
+
+    .topbar-right {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn {
+      padding: 4px 10px;
+      border-radius: var(--ui-radius);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--ui-border-strong);
+      background: var(--ui-surface);
+      color: var(--ui-text-secondary);
+      transition: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      min-height: 30px;
+    }
+
+    .btn:hover {
+      background: #f6f7f7;
+      border-color: var(--ui-border-strong);
+    }
+
+    .btn-primary {
+      background: var(--ui-accent);
+      color: #fff;
+      border-color: var(--ui-accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--ui-accent-hover);
+      border-color: var(--ui-accent-hover);
+    }
+
+    .btn svg {
+      flex-shrink: 0;
+    }
+
+    /* MAIN */
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--ui-surface);
+      border-right: 1px solid var(--ui-border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-search {
+      padding: 8px 8px;
+      border-bottom: 1px solid var(--ui-border);
+    }
+
+    .sidebar-search input {
+      width: 100%;
+      padding: 4px 8px;
+      min-height: 30px;
+      border-radius: var(--ui-radius);
+      border: 1px solid var(--ui-border-strong);
+      background: #f6f7f7;
+      font-size: 12px;
+      color: var(--ui-text-secondary);
+      outline: none;
+      transition: none;
+    }
+
+    .sidebar-search input:focus {
+      border-color: var(--ui-accent);
+      background: var(--ui-surface);
+      box-shadow: 0 0 0 0.5px var(--ui-accent);
+    }
+
+    .sidebar-search input::placeholder {
+      color: var(--ui-text-faint);
+    }
+
+    .sidebar-scroll {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: #c3c4c7;
+      border-radius: 0;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+      background: #a7aaad;
+    }
+
+    .sidebar-footer {
+      padding: 6px 8px;
+      border-top: 1px solid var(--ui-border);
+      display: flex;
+      align-items: center;
+    }
+
+    .reset-link {
+      font-size: 11px;
+      color: var(--ui-text-faint);
+      cursor: pointer;
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 4px;
+      font-family: inherit;
+    }
+
+    .reset-link:hover {
+      color: var(--ui-accent);
+    }
+
+    .token-section {
+      border-bottom: 1px solid var(--ui-border);
+    }
+
+    .token-section-header {
+      padding: 6px 8px 5px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ui-text-muted);
+      position: sticky;
+      top: 0;
+      background: var(--ui-surface);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      letter-spacing: 0;
+    }
+
+    .sec-header-left {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      flex: 1;
+      min-width: 0;
+      user-select: none;
+    }
+
+    .sec-header-left:hover {
+      color: var(--ui-text);
+    }
+
+    .add-token-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: var(--ui-radius);
+      border: 1px solid var(--ui-border);
+      background: transparent;
+      color: var(--ui-text-faint);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0;
+      transition: none;
+    }
+
+    .token-section-header:hover .add-token-btn {
+      opacity: 1;
+    }
+
+    .add-token-btn:hover {
+      background: var(--ui-accent-bg);
+      border-color: var(--ui-accent);
+      color: var(--ui-accent);
+    }
+
+    .token-section-body {
+      padding: 0;
+    }
+
+    .token-section-body.collapsed {
+      display: none;
+    }
+
+    /* TOKEN ROWS */
+    .token-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      min-height: 32px;
+      border-bottom: 1px solid #f0f0f1;
+    }
+
+    .token-section-body .token-row:last-child {
+      border-bottom: none;
+    }
+
+    .token-row:hover {
+      background: #f6f7f7;
+    }
+
+    .token-row:hover .del-btn {
+      opacity: 1;
+    }
+
+    .token-name {
+      font-size: 12px;
+      color: var(--ui-text-muted);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    .token-name strong {
+      font-weight: 600;
+      color: var(--ui-text);
+      display: block;
+      font-size: 12px;
+    }
+
+    .del-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--ui-radius);
+      border: none;
+      background: transparent;
+      color: var(--ui-text-faint);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      opacity: 0;
+    }
+
+    .del-btn:hover {
+      background: var(--ui-danger-bg);
+      color: var(--ui-danger);
+    }
+
+    /* ADD FORM */
+    .add-form {
+      padding: 8px;
+      background: #f6f7f7;
+      border-top: 1px solid var(--ui-border);
+      display: none;
+    }
+
+    .add-form.open {
+      display: block;
+    }
+
+    .add-form-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ui-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .add-form-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .add-form-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .add-form-row label {
+      font-size: 11px;
+      color: var(--ui-text-muted);
+      min-width: 36px;
+    }
+
+    .add-form-input {
+      flex: 1;
+      font-size: 12px;
+      padding: 4px 6px;
+      border: 1px solid var(--ui-border-strong);
+      border-radius: var(--ui-radius);
+      background: var(--ui-surface);
+      color: var(--ui-text-secondary);
+      outline: none;
+      font-family: inherit;
+      min-height: 28px;
+    }
+
+    .add-form-input:focus {
+      border-color: var(--ui-accent);
+      box-shadow: 0 0 0 0.5px var(--ui-accent);
+    }
+
+    .add-form-input.mono {
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .add-form-actions {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .add-form-actions button {
+      flex: 1;
+      padding: 4px 8px;
+      border-radius: var(--ui-radius);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--ui-border-strong);
+      background: var(--ui-surface);
+      color: var(--ui-text-secondary);
+      min-height: 28px;
+    }
+
+    .add-form-actions .confirm-btn {
+      background: var(--ui-accent);
+      color: #fff;
+      border-color: var(--ui-accent);
+    }
+
+    .add-form-actions .confirm-btn:hover {
+      background: var(--ui-accent-hover);
+    }
+
+    .add-form-actions .cancel-btn:hover {
+      background: #f6f7f7;
+    }
+
+    .add-form-error {
+      font-size: 11px;
+      color: var(--ui-danger);
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* INPUTS */
+    .color-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: #f6f7f7;
+      border: 1px solid var(--ui-border-strong);
+      border-radius: var(--ui-radius);
+      padding: 1px;
+    }
+
+    .color-input-wrap:focus-within {
+      border-color: var(--ui-accent);
+      box-shadow: 0 0 0 0.5px var(--ui-accent);
+    }
+
+    .color-swatch-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 1px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .color-swatch-btn input[type="color"] {
+      position: absolute;
+      inset: -4px;
+      width: calc(100%+8px);
+      height: calc(100%+8px);
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .hex-input {
+      width: 66px;
+      font-size: 11px;
+      font-family: Consolas, Monaco, monospace;
+      padding: 2px 4px;
+      border: none;
+      background: transparent;
+      color: var(--ui-text-secondary);
+      outline: none;
+    }
+
+    .preset-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 6px 8px 6px;
+      border-bottom: 1px solid var(--ui-border);
+      background: #f6f7f7;
+    }
+
+    .preset-chip {
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: var(--ui-radius);
+      border: 1px solid var(--ui-border-strong);
+      background: var(--ui-surface);
+      color: var(--ui-text-muted);
+      cursor: pointer;
+      font-weight: 500;
+      min-height: 24px;
+    }
+
+    .preset-chip:hover {
+      background: var(--ui-accent-bg);
+      border-color: var(--ui-accent);
+      color: var(--ui-accent);
+    }
+
+    .text-input-token {
+      font-size: 12px;
+      padding: 3px 6px;
+      border: 1px solid var(--ui-border-strong);
+      border-radius: var(--ui-radius);
+      background: #f6f7f7;
+      color: var(--ui-text-secondary);
+      outline: none;
+      font-family: Consolas, Monaco, monospace;
+      min-height: 26px;
+    }
+
+    .text-input-token:focus {
+      border-color: var(--ui-accent);
+      box-shadow: 0 0 0 0.5px var(--ui-accent);
+      background: var(--ui-surface);
+    }
+
+    .gradient-preview {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--ui-radius);
+      border: 1px solid var(--ui-border-strong);
+      flex-shrink: 0;
+    }
+
+    .section-arrow {
+      transition: none;
+      opacity: 0.5;
+    }
+
+    .section-arrow.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .sec-header-left:hover .section-arrow {
+      opacity: 0.8;
+    }
+
+    /* PREVIEW */
+    .preview-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .preview-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .preview-panel::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .preview-panel::-webkit-scrollbar-thumb {
+      background: #c3c4c7;
+      border-radius: 0;
+    }
+
+    .preview-section {
+      background: var(--ui-surface);
+      border: 1px solid var(--ui-border);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    }
+
+    .preview-section-title {
+      padding: 8px 12px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--ui-text-muted);
+      border-bottom: 1px solid var(--ui-border);
+      letter-spacing: 0;
+    }
+
+    .preview-body {
+      padding: 12px;
+    }
+
+    .preview-colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preview-color-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .preview-color-chip .chip {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .chip-label {
+      font-size: 10px;
+      color: var(--ui-text-faint);
+      text-align: center;
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .preview-gradients {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .preview-grad-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .preview-grad-chip .grad {
+      width: 80px;
+      height: 40px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .preview-type-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .preview-type-scale>div {
+      padding: 4px 0;
+      border-bottom: 1px solid #f0f0f1;
+    }
+
+    .preview-type-scale>div:last-child {
+      border-bottom: none;
+    }
+
+    .preview-spacing-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spacing-demo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spacing-demo-bar {
+      background: var(--ui-accent);
+      height: 14px;
+      min-width: 4px;
+      opacity: 0.35;
+    }
+
+    .spacing-demo-label {
+      font-size: 11px;
+      color: var(--ui-text-muted);
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .preview-shadows {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .shadow-demo-box {
+      width: 80px;
+      height: 52px;
+      background: var(--ui-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--ui-text-faint);
+      border: 1px solid var(--ui-border);
+    }
+
+    .preview-ratios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .ratio-demo {
+      background: var(--ui-accent);
+      opacity: 0.25;
+    }
+
+    /* OUTPUT */
+    .output-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--ui-surface);
+    }
+
+    .output-toolbar {
+      padding: 8px 12px;
+      background: var(--ui-surface);
+      border-bottom: 1px solid var(--ui-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .output-format-tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    .output-tab {
+      padding: 4px 10px;
+      border-radius: var(--ui-radius);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--ui-text-muted);
+    }
+
+    .output-tab.active {
+      background: var(--ui-accent-bg);
+      color: var(--ui-accent);
+      border-color: var(--ui-accent);
+    }
+
+    .copy-btn {
+      margin-left: auto;
+    }
+
+    .output-code {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--ui-text-secondary);
+      white-space: pre-wrap;
+      word-break: break-all;
+      background: #f6f7f7;
+    }
+
+    .output-code::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .output-code::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .output-code::-webkit-scrollbar-thumb {
+      background: #c3c4c7;
+      border-radius: 0;
+    }
+
+    .code-key {
+      color: #2271b1;
+    }
+
+    .code-str {
+      color: #007017;
+    }
+
+    .code-num {
+      color: #b26200;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--ui-text);
+      color: #fff;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 100;
+      border-radius: var(--ui-radius);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">WP <span>Design</span> Editor</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tab-group">
+        <button class="tab active" onclick="switchMainTab('preview')">Vista previa</button>
+        <button class="tab" onclick="switchMainTab('output')">Exportar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-search">
+        <input type="text" id="searchInput" placeholder="Buscar token..." oninput="filterTokens(this.value)">
+      </div>
+      <div class="sidebar-scroll" id="sidebarScroll"></div>
+      <div class="sidebar-footer">
+        <button class="reset-link" onclick="resetTokens()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          Resetear tokens
+        </button>
+      </div>
+    </div>
+    <div id="previewPanel" class="preview-panel"></div>
+    <div id="outputPanel" class="output-panel" style="display:none">
+      <div class="output-toolbar">
+        <div class="output-format-tabs">
+          <button class="output-tab active" onclick="switchOutputTab('themejson')">theme.json</button>
+          <button class="output-tab" onclick="switchOutputTab('css')">CSS variables</button>
+        </div>
+        <button class="btn copy-btn" onclick="copyOutput()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" />
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+          </svg>
+          Copiar
+        </button>
+      </div>
+      <div class="output-code" id="outputCode"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">✓ Copiado al portapapeles</div>
+
+  <script>
+    // ─── STATE ────────────────────────────────────────────────────────────────────
+    const DEFAULT_TOKENS = {
+      colors: [
+        { slug: 'black', name: 'Black', value: '#000000' },
+        { slug: 'cyan-bluish-gray', name: 'Cyan Bluish Gray', value: '#abb8c3' },
+        { slug: 'white', name: 'White', value: '#ffffff' },
+        { slug: 'pale-pink', name: 'Pale Pink', value: '#f78da7' },
+        { slug: 'vivid-red', name: 'Vivid Red', value: '#cf2e2e' },
+        { slug: 'luminous-vivid-orange', name: 'Luminous Vivid Orange', value: '#ff6900' },
+        { slug: 'luminous-vivid-amber', name: 'Luminous Vivid Amber', value: '#fcb900' },
+        { slug: 'light-green-cyan', name: 'Light Green Cyan', value: '#7bdcb5' },
+        { slug: 'vivid-green-cyan', name: 'Vivid Green Cyan', value: '#00d084' },
+        { slug: 'pale-cyan-blue', name: 'Pale Cyan Blue', value: '#8ed1fc' },
+        { slug: 'vivid-cyan-blue', name: 'Vivid Cyan Blue', value: '#0693e3' },
+        { slug: 'vivid-purple', name: 'Vivid Purple', value: '#9b51e0' },
+      ],
+      gradients: [
+        { slug: 'vivid-cyan-blue-to-vivid-purple', name: 'Cyan → Purple', value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)' },
+        { slug: 'light-green-cyan-to-vivid-green-cyan', name: 'Green Cyan', value: 'linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%)' },
+        { slug: 'luminous-vivid-amber-to-luminous-vivid-orange', name: 'Amber → Orange', value: 'linear-gradient(135deg,rgb(252,185,0) 0%,rgb(255,105,0) 100%)' },
+        { slug: 'luminous-vivid-orange-to-vivid-red', name: 'Orange → Red', value: 'linear-gradient(135deg,rgb(255,105,0) 0%,rgb(207,46,46) 100%)' },
+        { slug: 'very-light-gray-to-cyan-bluish-gray', name: 'Gray Scale', value: 'linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%)' },
+        { slug: 'cool-to-warm-spectrum', name: 'Cool–Warm Spectrum', value: 'linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%)' },
+        { slug: 'blush-light-purple', name: 'Blush Purple', value: 'linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%)' },
+        { slug: 'blush-bordeaux', name: 'Blush Bordeaux', value: 'linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%)' },
+        { slug: 'luminous-dusk', name: 'Luminous Dusk', value: 'linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%)' },
+        { slug: 'pale-ocean', name: 'Pale Ocean', value: 'linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%)' },
+        { slug: 'electric-grass', name: 'Electric Grass', value: 'linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%)' },
+        { slug: 'midnight', name: 'Midnight', value: 'linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%)' },
+      ],
+      fontSizes: [
+        { slug: 'small', name: 'Small', value: '0.8125rem' },
+        { slug: 'normal', name: 'Normal', value: '1rem' },
+        { slug: 'medium', name: 'Medium', value: '1.25rem' },
+        { slug: 'large', name: 'Large', value: '2.25rem' },
+        { slug: 'x-large', name: 'X-Large', value: '2.625rem' },
+        { slug: 'huge', name: 'Huge', value: '2.625rem' },
+      ],
+      spacing: [
+        { slug: '20', name: 'Spacing 20', value: '0.44rem' },
+        { slug: '30', name: 'Spacing 30', value: '0.67rem' },
+        { slug: '40', name: 'Spacing 40', value: '1rem' },
+        { slug: '50', name: 'Spacing 50', value: '1.5rem' },
+        { slug: '60', name: 'Spacing 60', value: '2.25rem' },
+        { slug: '70', name: 'Spacing 70', value: '3.38rem' },
+        { slug: '80', name: 'Spacing 80', value: '5.06rem' },
+      ],
+      aspectRatios: [
+        { slug: '1-1', name: '1:1', value: '1/1' },
+        { slug: '4-3', name: '4:3', value: '4/3' },
+        { slug: '3-2', name: '3:2', value: '3/2' },
+        { slug: '16-9', name: '16:9', value: '16/9' },
+        { slug: '2-3', name: '2:3', value: '2/3' },
+        { slug: '9-16', name: '9:16', value: '9/16' },
+      ],
+      shadows: [
+        { slug: 'natural', name: 'Natural', value: '6px 6px 9px rgba(0, 0, 0, 0.2)' },
+        { slug: 'deep', name: 'Deep', value: '12px 12px 50px rgba(0, 0, 0, 0.4)' },
+        { slug: 'sharp', name: 'Sharp', value: '6px 6px 0px rgba(0, 0, 0, 0.2)' },
+        { slug: 'outlined', name: 'Outlined', value: '6px 6px 0px -3px rgb(255, 255, 255), 6px 6px rgb(0, 0, 0)' },
+        { slug: 'crisp', name: 'Crisp', value: '6px 6px 0px rgb(0, 0, 0)' },
+      ],
+      layout: { contentSize: '64rem', wideSize: '90rem' },
+    };
+
+    let tokens = JSON.parse(JSON.stringify(DEFAULT_TOKENS));
+    let activeMainTab = 'preview';
+    let activeOutputTab = 'themejson';
+    let collapsedSections = {};
+    let openAddForms = {};
+
+    // ─── UTILS ────────────────────────────────────────────────────────────────────
+    function remToPx(v) { return v.includes('px') ? parseInt(v) : Math.round(parseFloat(v) * 16); }
+    function pxToRem(px) { return +(px / 16).toFixed(4); }
+    function isValidHex(h) { return /^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(h); }
+    function slugify(s) { return s.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''); }
+    function roundRem(v) { return parseFloat(v).toFixed(4).replace(/\.?0+$/, '') + 'rem'; }
+
+    // ─── FONT SCALE PRESETS ──────────────────────────────────────────────────────
+    const SLUG_STEPS = {
+      small: -1, normal: 0, medium: 1, large: 2,
+      'x-large': 3, huge: 4, '2xl': 5, '3xl': 6,
+    };
+
+    const FONT_PRESETS = {
+      wordpress: {
+        label: 'WordPress',
+        sizes: [
+          { slug: 'small', value: '0.8125rem' },
+          { slug: 'normal', value: '1rem' },
+          { slug: 'medium', value: '1.25rem' },
+          { slug: 'large', value: '2.25rem' },
+          { slug: 'x-large', value: '2.625rem' },
+          { slug: 'huge', value: '2.625rem' },
+        ],
+      },
+      'major-second': { label: '2ª mayor (1.125)', ratio: 1.125 },
+      'minor-third': { label: '3ª menor (1.2)', ratio: 1.2 },
+      'major-third': { label: '3ª mayor (1.25)', ratio: 1.25 },
+      'perfect-fourth': { label: '4ª justa (1.333)', ratio: 1.333 },
+      golden: { label: 'Áurea (1.618)', ratio: 1.618 },
+    };
+
+    function applyFontPreset(key) {
+      const preset = FONT_PRESETS[key];
+      const normalToken = tokens.fontSizes.find(t => t.slug === 'normal');
+      if (!normalToken) return;
+      const normalNum = parseFloat(normalToken.value);
+      if (isNaN(normalNum)) return;
+      const normalUnit = (normalToken.value.match(/[a-z%]+/i) || [])[0] || 'rem';
+
+      tokens.fontSizes.forEach(t => {
+        if (t.slug === 'normal') return;
+        if (preset.sizes) {
+          const map = {};
+          preset.sizes.forEach(s => map[s.slug] = s.value);
+          if (map[t.slug]) {
+            const v = parseFloat(map[t.slug]) * normalNum;
+            t.value = normalUnit === 'rem' ? roundRem(v) : Math.round(v) + normalUnit;
+          } else {
+            const v = parseFloat(t.value);
+            t.value = normalUnit === 'rem' ? roundRem(v) : Math.round(v) + normalUnit;
+          }
+        } else if (preset.ratio) {
+          const step = SLUG_STEPS[t.slug];
+          if (step !== undefined) {
+            const v = normalNum * Math.pow(preset.ratio, step);
+            t.value = normalUnit === 'rem' ? roundRem(v) : Math.round(v) + normalUnit;
+          } else {
+            const v = parseFloat(t.value);
+            t.value = normalUnit === 'rem' ? roundRem(v) : Math.round(v) + normalUnit;
+          }
+        }
+      });
+
+      tokens.fontSizes.sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+      buildSidebar(document.getElementById('searchInput').value);
+      scheduleRender();
+    }
+
+    // ─── SECTION CONFIGS ─────────────────────────────────────────────────────────
+    const SECTION_CONFIGS = {
+      colors: {
+        label: 'Colores',
+        render: renderColorRow,
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: 'Mi color', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: 'mi-color', mono: true },
+          { id: 'value', label: 'Valor', placeholder: '#ff0000', mono: true },
+        ],
+        defaultValue: '#cccccc',
+      },
+      gradients: {
+        label: 'Gradientes',
+        render: renderGradientRow,
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: 'Mi gradiente', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: 'mi-gradiente', mono: true },
+          { id: 'value', label: 'CSS', placeholder: 'linear-gradient(...)', mono: true },
+        ],
+        defaultValue: 'linear-gradient(135deg,#cccccc 0%,#888888 100%)',
+      },
+      fontSizes: {
+        label: 'Tamaños tipográficos',
+        render: (t, k) => renderRemRangeRow(t, k, 0.5, 6),
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: '2XL', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: '2xl', mono: true },
+          { id: 'value', label: 'Valor (rem)', placeholder: '3.5rem', mono: true },
+        ],
+        defaultValue: '2rem',
+      },
+      spacing: {
+        label: 'Espaciado',
+        render: (t, k) => renderRemRangeRow(t, k, 0.1, 10),
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: 'Spacing 90', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: '90', mono: true },
+          { id: 'value', label: 'Valor (rem)', placeholder: '7.5rem', mono: true },
+        ],
+        defaultValue: '1rem',
+      },
+      shadows: {
+        label: 'Sombras',
+        render: renderShadowRow,
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: 'Floating', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: 'floating', mono: true },
+          { id: 'value', label: 'CSS', placeholder: '0 4px 20px rgba(0,0,0,0.15)', mono: true },
+        ],
+        defaultValue: '0 4px 20px rgba(0,0,0,0.15)',
+      },
+      aspectRatios: {
+        label: 'Aspect Ratios',
+        render: renderAspectRatioRow,
+        addFields: [
+          { id: 'name', label: 'Nombre', placeholder: '16:9', mono: false },
+          { id: 'slug', label: 'Slug', placeholder: '16-9', mono: true },
+          { id: 'value', label: 'Ratio', placeholder: '16/9', mono: true },
+        ],
+        defaultValue: '1/1',
+      },
+    };
+
+    // ─── SIDEBAR ─────────────────────────────────────────────────────────────────
+    function buildSidebar(filter = '') {
+      const scroll = document.getElementById('sidebarScroll');
+      scroll.innerHTML = '';
+      const lf = filter.toLowerCase();
+
+      Object.entries(SECTION_CONFIGS).forEach(([key, cfg]) => {
+        const items = tokens[key].filter(t =>
+          !lf || t.name.toLowerCase().includes(lf) || t.slug.toLowerCase().includes(lf) || t.value.toLowerCase().includes(lf)
+        );
+        if (lf && !items.length) return;
+
+        const isCollapsed = collapsedSections[key];
+        const isFormOpen = openAddForms[key];
+        const sec = document.createElement('div');
+        sec.className = 'token-section';
+        sec.innerHTML = `
+      <div class="token-section-header">
+        <div class="sec-header-left" onclick="toggleSection('${key}')">
+          <svg class="section-arrow ${isCollapsed ? 'collapsed' : ''}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          ${cfg.label}
+        </div>
+        <button class="add-token-btn" title="Añadir token" onclick="toggleAddForm('${key}')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="token-section-body ${isCollapsed ? 'collapsed' : ''}" id="sec-body-${key}">
+        ${key === 'fontSizes' && !lf ? `<div class="preset-bar">${Object.entries(FONT_PRESETS).map(([k, p]) => `<button class="preset-chip" onclick="applyFontPreset('${k}')">${p.label}</button>`).join('')}</div>` : ''}
+      </div>
+      <div class="add-form ${isFormOpen ? 'open' : ''}" id="add-form-${key}">
+        <div class="add-form-title">Nuevo token</div>
+        <div class="add-form-fields" id="add-form-fields-${key}"></div>
+        <div class="add-form-error" id="add-form-error-${key}"></div>
+        <div class="add-form-actions">
+          <button class="cancel-btn" onclick="cancelAddForm('${key}')">Cancelar</button>
+          <button class="confirm-btn" onclick="confirmAddToken('${key}')">Añadir</button>
+        </div>
+      </div>
+    `;
+        scroll.appendChild(sec);
+
+        // populate rows
+        const body = sec.querySelector(`#sec-body-${key}`);
+        (lf ? items : tokens[key]).forEach(t => {
+          const row = document.createElement('div');
+          row.className = 'token-row';
+          row.innerHTML = cfg.render(t, key) + renderDelBtn(key, t.slug);
+          body.appendChild(row);
+        });
+
+        // populate add form fields
+        const fieldsEl = sec.querySelector(`#add-form-fields-${key}`);
+        cfg.addFields.forEach(f => {
+          const row = document.createElement('div');
+          row.className = 'add-form-row';
+          row.innerHTML = `
+        <label for="af-${key}-${f.id}">${f.label}</label>
+        <input id="af-${key}-${f.id}" class="add-form-input ${f.mono ? 'mono' : ''}"
+          placeholder="${f.placeholder}" autocomplete="off">
+      `;
+          fieldsEl.appendChild(row);
+        });
+      });
+
+      // LAYOUT section
+      const layoutMatches = !lf || 'layout contentsize widesize content wide rem'.includes(lf);
+      if (layoutMatches) {
+        const isCollapsed = collapsedSections['layout'];
+        const lsec = document.createElement('div');
+        lsec.className = 'token-section';
+        lsec.innerHTML = `
+      <div class="token-section-header">
+        <div class="sec-header-left" onclick="toggleSection('layout')">
+          <svg class="section-arrow ${isCollapsed ? 'collapsed' : ''}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          Layout
+        </div>
+      </div>
+      <div class="token-section-body ${isCollapsed ? 'collapsed' : ''}" id="sec-body-layout">
+        ${renderLayoutRows()}
+      </div>
+    `;
+        scroll.appendChild(lsec);
+      }
+    }
+
+    function renderDelBtn(key, slug) {
+      return `<button class="del-btn" title="Eliminar" onclick="deleteToken('${key}','${slug}')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>`;
+    }
+
+    function toggleSection(key) {
+      collapsedSections[key] = !collapsedSections[key];
+      const body = document.getElementById('sec-body-' + key);
+      if (!body) return;
+      const arrow = body.previousElementSibling.querySelector('.section-arrow');
+      body.classList.toggle('collapsed', collapsedSections[key]);
+      if (arrow) arrow.classList.toggle('collapsed', collapsedSections[key]);
+    }
+
+    function toggleAddForm(key) {
+      openAddForms[key] = !openAddForms[key];
+      const form = document.getElementById('add-form-' + key);
+      if (form) {
+        form.classList.toggle('open', openAddForms[key]);
+        if (openAddForms[key]) {
+          // open the section too
+          collapsedSections[key] = false;
+          const body = document.getElementById('sec-body-' + key);
+          const arrow = body && body.previousElementSibling && body.previousElementSibling.querySelector('.section-arrow');
+          if (body) body.classList.remove('collapsed');
+          if (arrow) arrow.classList.remove('collapsed');
+          // focus first field
+          setTimeout(() => { const f = form.querySelector('input'); if (f) f.focus(); }, 50);
+        }
+        const err = document.getElementById('add-form-error-' + key);
+        if (err) { err.style.display = 'none'; err.textContent = ''; }
+      }
+    }
+
+    function cancelAddForm(key) {
+      openAddForms[key] = false;
+      const form = document.getElementById('add-form-' + key);
+      if (form) {
+        form.classList.remove('open');
+        form.querySelectorAll('input').forEach(i => i.value = '');
+        const err = document.getElementById('add-form-error-' + key);
+        if (err) { err.style.display = 'none'; err.textContent = ''; }
+      }
+    }
+
+    function confirmAddToken(key) {
+      const cfg = SECTION_CONFIGS[key];
+      const vals = {};
+      let valid = true;
+      cfg.addFields.forEach(f => {
+        const el = document.getElementById(`af-${key}-${f.id}`);
+        vals[f.id] = el ? el.value.trim() : '';
+        if (!vals[f.id]) valid = false;
+      });
+      const errEl = document.getElementById('add-form-error-' + key);
+      if (!valid) {
+        errEl.textContent = 'Rellena todos los campos.'; errEl.style.display = 'block'; return;
+      }
+      // slug must be unique
+      const slug = slugify(vals.slug || vals.name);
+      if (tokens[key].find(t => t.slug === slug)) {
+        errEl.textContent = `El slug "${slug}" ya existe.`; errEl.style.display = 'block'; return;
+      }
+      // validate value for colors
+      if (key === 'colors' && !isValidHex(vals.value) && !vals.value.startsWith('rgb') && !vals.value.startsWith('hsl')) {
+        errEl.textContent = 'Introduce un color válido (hex, rgb...).'; errEl.style.display = 'block'; return;
+      }
+      // for rem-based: ensure rem suffix
+      let finalVal = vals.value;
+      if ((key === 'fontSizes' || key === 'spacing') && !finalVal.endsWith('rem') && !finalVal.endsWith('px')) {
+        finalVal = parseFloat(finalVal) + 'rem';
+      }
+      tokens[key].push({ slug, name: vals.name, value: finalVal });
+      if (key === 'fontSizes' || key === 'spacing') {
+        tokens[key].sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+      }
+      cancelAddForm(key);
+      buildSidebar(document.getElementById('searchInput').value);
+      scheduleRender();
+    }
+
+    function deleteToken(key, slug) {
+      tokens[key] = tokens[key].filter(t => t.slug !== slug);
+      buildSidebar(document.getElementById('searchInput').value);
+      scheduleRender();
+    }
+
+    // ─── ROW RENDERERS ────────────────────────────────────────────────────────────
+    function renderColorRow(t) {
+      const safeHex = t.value.startsWith('#') ? t.value : '#000000';
+      return `
+    <div class="color-input-wrap">
+      <div class="color-swatch-btn" style="background:${t.value}">
+        <input type="color" value="${safeHex}"
+          oninput="updateColor('${t.slug}', this.value, this.closest('.token-row').querySelector('.hex-input'))">
+      </div>
+      <input class="hex-input" value="${t.value}" maxlength="9"
+        onchange="updateColorFromHex('${t.slug}', this.value, this)"
+        oninput="syncSwatchFromHex('${t.slug}', this.value, this)">
+    </div>
+    <div class="token-name"><strong>${t.name}</strong>${t.slug}</div>`;
+    }
+
+    function renderGradientRow(t) {
+      const safe = t.value.replace(/"/g, '&quot;');
+      return `
+    <div class="gradient-preview" style="background:${t.value}; flex-shrink:0;"></div>
+    <div class="token-name" style="flex:1;min-width:0;">
+      <strong>${t.name}</strong>
+      <input class="text-input-token" style="width:100%;margin-top:2px;" value="${safe}"
+        oninput="updateGradient('${t.slug}', this.value, this)">
+    </div>`;
+    }
+
+    function renderRemRangeRow(t, key) {
+      return `
+    <div class="token-name" style="min-width:86px;max-width:86px;"><strong>${t.name}</strong>${t.slug}</div>
+    <input type="text" class="text-input-token" style="flex:1;" value="${t.value}"
+      onchange="updateTokenValue('${key}','${t.slug}',this.value,this)">`;
+    }
+
+    function renderShadowRow(t) {
+      const safe = t.value.replace(/"/g, '&quot;');
+      return `
+    <div class="token-name" style="min-width:66px;max-width:66px;"><strong>${t.name}</strong></div>
+    <input class="text-input-token" style="flex:1;" value="${safe}"
+      oninput="updateShadow('${t.slug}', this.value)">`;
+    }
+
+    function renderAspectRatioRow(t) {
+      return `
+    <div class="token-name" style="min-width:56px;max-width:56px;"><strong>${t.name}</strong></div>
+    <input class="text-input-token" style="flex:1;" value="${t.value}"
+      oninput="updateAspectRatio('${t.slug}', this.value)">`;
+    }
+
+    function renderLayoutRows() {
+      const csRaw = tokens.layout.contentSize;
+      const wsRaw = tokens.layout.wideSize;
+      return `
+    <div class="token-row">
+      <div class="token-name" style="min-width:86px;max-width:86px;"><strong>Content</strong>contentSize</div>
+      <input type="text" class="text-input-token" style="flex:1;" value="${csRaw}"
+        onchange="updateLayout('contentSize', this.value, this)">
+    </div>
+    <div class="token-row">
+      <div class="token-name" style="min-width:86px;max-width:86px;"><strong>Wide</strong>wideSize</div>
+      <input type="text" class="text-input-token" style="flex:1;" value="${wsRaw}"
+        onchange="updateLayout('wideSize', this.value, this)">
+    </div>`;
+    }
+
+    // ─── UPDATE HANDLERS ─────────────────────────────────────────────────────────
+    function updateColor(slug, val, hexInput) {
+      const t = tokens.colors.find(c => c.slug === slug); if (!t) return;
+      t.value = val;
+      if (hexInput) hexInput.value = val;
+      const sw = hexInput && hexInput.closest('.color-input-wrap').querySelector('.color-swatch-btn');
+      if (sw) sw.style.background = val;
+      scheduleRender();
+    }
+    function updateColorFromHex(slug, val, input) {
+      if (!isValidHex(val)) return;
+      const t = tokens.colors.find(c => c.slug === slug); if (!t) return;
+      t.value = val;
+      const sw = input.closest('.color-input-wrap').querySelector('.color-swatch-btn');
+      if (sw) { sw.style.background = val; const ci = sw.querySelector('input[type=color]'); if (ci) ci.value = val; }
+      scheduleRender();
+    }
+    function syncSwatchFromHex(slug, val, input) {
+      if (!isValidHex(val)) return;
+      const sw = input.closest('.color-input-wrap').querySelector('.color-swatch-btn');
+      if (sw) { sw.style.background = val; const ci = sw.querySelector('input[type=color]'); if (ci) ci.value = val; }
+    }
+    function updateGradient(slug, val, input) {
+      const t = tokens.gradients.find(g => g.slug === slug); if (!t) return;
+      t.value = val;
+      const pr = input.closest('.token-row').querySelector('.gradient-preview');
+      if (pr) pr.style.background = val;
+      scheduleRender();
+    }
+    function updateTokenValue(key, slug, val, input) {
+      const t = tokens[key].find(x => x.slug === slug); if (!t) return;
+      const num = parseFloat(val);
+      if (isNaN(num)) return;
+      const u = (val.match(/[a-z%]+/i) || [])[0] || t.value.replace(/[\d.]/g, '').trim() || 'rem';
+      const newVal = u === 'rem' ? roundRem(num) : Math.round(num) + u;
+      t.value = newVal;
+      input.value = newVal;
+      if (key === 'fontSizes' || key === 'spacing') {
+        tokens[key].sort((a, b) => parseFloat(a.value) - parseFloat(b.value));
+      }
+      buildSidebar(document.getElementById('searchInput').value);
+      scheduleRender();
+    }
+    function updateShadow(slug, val) {
+      const t = tokens.shadows.find(s => s.slug === slug); if (!t) return;
+      t.value = val; scheduleRender();
+    }
+    function updateAspectRatio(slug, val) {
+      const t = tokens.aspectRatios.find(a => a.slug === slug); if (!t) return;
+      t.value = val; scheduleRender();
+    }
+    function updateLayout(key, val, input) {
+      const num = parseFloat(val);
+      if (isNaN(num)) return;
+      const unit = (val.match(/[a-z%]+/i) || [])[0] || 'rem';
+      const newVal = num + unit;
+      tokens.layout[key] = newVal;
+      input.value = newVal;
+      scheduleRender();
+    }
+
+    // ─── THROTTLE ─────────────────────────────────────────────────────────────────
+    let renderTimer = null;
+    function scheduleRender() {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(() => { buildPreview(); buildOutput(); }, 60);
+    }
+
+    // ─── PREVIEW ─────────────────────────────────────────────────────────────────
+    function buildPreview() {
+      const panel = document.getElementById('previewPanel');
+      panel.innerHTML = '';
+
+      // Colors
+      const cSec = mkPS('Colores'); const cGrid = document.createElement('div'); cGrid.className = 'preview-colors';
+      tokens.colors.forEach(t => { const ch = document.createElement('div'); ch.className = 'preview-color-chip'; ch.innerHTML = `<div class="chip" style="background:${t.value}"></div><div class="chip-label">${t.name}</div>`; cGrid.appendChild(ch); });
+      cSec.querySelector('.preview-body').appendChild(cGrid); panel.appendChild(cSec);
+
+      // Gradients
+      const gSec = mkPS('Gradientes'); const gGrid = document.createElement('div'); gGrid.className = 'preview-gradients';
+      tokens.gradients.forEach(t => { const ch = document.createElement('div'); ch.className = 'preview-grad-chip'; ch.innerHTML = `<div class="grad" style="background:${t.value}"></div><div class="chip-label">${t.name}</div>`; gGrid.appendChild(ch); });
+      gSec.querySelector('.preview-body').appendChild(gGrid); panel.appendChild(gSec);
+
+      // Typography
+      const tSec = mkPS('Tipografía'); const tScale = document.createElement('div'); tScale.className = 'preview-type-scale';
+      [...tokens.fontSizes].reverse().forEach(t => {
+        const px = remToPx(t.value);
+        const row = document.createElement('div');
+        row.style.cssText = `font-size:${t.value};line-height:1.2;color:#1a1a1a;font-weight:${parseFloat(t.value) >= 2 ? 500 : 400};`;
+        row.textContent = `${t.name} — ${t.value} (~${px}px)`;
+        tScale.appendChild(row);
+      });
+      tSec.querySelector('.preview-body').appendChild(tScale); panel.appendChild(tSec);
+
+      // Spacing
+      const sSec = mkPS('Espaciado'); const sScale = document.createElement('div'); sScale.className = 'preview-spacing-scale';
+      tokens.spacing.forEach(t => {
+        const px = remToPx(t.value);
+        const row = document.createElement('div'); row.className = 'spacing-demo';
+        row.innerHTML = `<div class="spacing-demo-bar" style="width:${Math.min(px * 2, 280)}px"></div><span class="spacing-demo-label">--spacing--${t.slug} · ${t.value} · ~${px}px</span>`;
+        sScale.appendChild(row);
+      });
+      sSec.querySelector('.preview-body').appendChild(sScale); panel.appendChild(sSec);
+
+      // Shadows
+      const shSec = mkPS('Sombras'); const shGrid = document.createElement('div'); shGrid.className = 'preview-shadows';
+      tokens.shadows.forEach(t => { const b = document.createElement('div'); b.className = 'shadow-demo-box'; b.style.boxShadow = t.value; b.textContent = t.name; shGrid.appendChild(b); });
+      shSec.querySelector('.preview-body').appendChild(shGrid); panel.appendChild(shSec);
+
+      // Ratios
+      const rSec = mkPS('Aspect Ratios'); const rGrid = document.createElement('div'); rGrid.className = 'preview-ratios';
+      tokens.aspectRatios.forEach(t => {
+        const [w, h] = t.value.split('/').map(Number); const bw = 60; const ht = w && h ? Math.round(bw * h / w) : bw;
+        const wrap = document.createElement('div'); wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px;';
+        wrap.innerHTML = `<div class="ratio-demo" style="width:${bw}px;height:${ht}px;"></div><span style="font-size:10px;color:#9b9b9b">${t.name}</span>`;
+        rGrid.appendChild(wrap);
+      });
+      rSec.querySelector('.preview-body').appendChild(rGrid); panel.appendChild(rSec);
+
+      // Layout
+      const lySec = mkPS('Layout'); const lyBody = lySec.querySelector('.preview-body');
+      const csRaw = tokens.layout.contentSize; const wsRaw = tokens.layout.wideSize;
+      const csUnit = csRaw.replace(/[\d.]/g, '').trim();
+      const wsUnit = wsRaw.replace(/[\d.]/g, '').trim();
+      const csPxV = csUnit === 'rem' ? remToPx(csRaw) : parseInt(csRaw);
+      const wsPxV = wsUnit === 'rem' ? remToPx(wsRaw) : parseInt(wsRaw);
+      lyBody.style.overflowX = 'auto';
+      const barH = 18;
+      lyBody.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px;padding:4px 0;min-width:${Math.max(wsPxV, csPxV) + 80}px">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;color:#50575e;font-weight:600;min-width:46px;">wide</span>
+        <div style="width:${wsPxV}px;height:24px;background:#e8f4fd;border:1px solid #b3d9f5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:10px;color:#2271b1;font-family:Consolas,monospace;white-space:nowrap;">${wsRaw} (~${wsPxV}px)</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;color:#50575e;font-weight:600;min-width:46px;">content</span>
+        <div style="width:${csPxV}px;height:24px;background:#fff;border:1.5px solid #2271b1;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:10px;color:#2271b1;font-weight:500;font-family:Consolas,monospace;white-space:nowrap;">${csRaw} (~${csPxV}px)</span>
+        </div>
+      </div>
+    </div>`;
+      panel.appendChild(lySec);
+    }
+
+    function mkPS(title) {
+      const s = document.createElement('div'); s.className = 'preview-section';
+      s.innerHTML = `<div class="preview-section-title">${title}</div><div class="preview-body"></div>`;
+      return s;
+    }
+
+    // ─── OUTPUT ───────────────────────────────────────────────────────────────────
+    function buildOutput() {
+      const el = document.getElementById('outputCode');
+      el.innerHTML = activeOutputTab === 'themejson' ? buildThemeJson() : buildCssVars();
+    }
+
+    function makeThemeObj() {
+      return {
+        "$schema": "https://schemas.wp.org/trunk/theme.json",
+        "version": 3,
+        "settings": {
+          "color": {
+            "palette": tokens.colors.map(t => ({ slug: t.slug, name: t.name, color: t.value })),
+            "gradients": tokens.gradients.map(t => ({ slug: t.slug, name: t.name, gradient: t.value })),
+            "defaultGradients": false, "defaultPalette": false
+          },
+          "typography": {
+            "fontSizes": tokens.fontSizes.map(t => ({ slug: t.slug, name: t.name, size: t.value, fluid: false })),
+            "fontFamilies": [{ "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif", "slug": "system-font", "name": "System Font" }]
+          },
+          "spacing": {
+            "spacingSizes": tokens.spacing.map(t => ({ slug: t.slug, name: t.name, size: t.value })),
+            "units": ["px", "em", "rem", "%", "svw", "svh"]
+          },
+          "shadow": { "presets": tokens.shadows.map(t => ({ slug: t.slug, name: t.name, shadow: t.value })) },
+          "dimensions": { "aspectRatios": tokens.aspectRatios.map(t => ({ slug: t.slug, name: t.name, ratio: t.value })) },
+          "layout": { "contentSize": tokens.layout.contentSize, "wideSize": tokens.layout.wideSize },
+          "appearanceTools": true
+        },
+        "styles": {
+          "color": { "background": "var(--wp--preset--color--white)", "text": "var(--wp--preset--color--black)" },
+          "typography": { "fontFamily": "var(--wp--preset--font-family--system-font)", "fontSize": "var(--wp--preset--font-size--medium)" }
+        }
+      };
+    }
+
+    function buildThemeJson() { return syntaxHighlight(JSON.stringify(makeThemeObj(), null, 2)); }
+
+    function buildCssVars() {
+      const lines = [':root {'];
+      tokens.colors.forEach(t => lines.push(`  --wp--preset--color--${t.slug}: ${t.value};`));
+      lines.push('');
+      tokens.gradients.forEach(t => lines.push(`  --wp--preset--gradient--${t.slug}: ${t.value};`));
+      lines.push('');
+      tokens.fontSizes.forEach(t => lines.push(`  --wp--preset--font-size--${t.slug}: ${t.value};`));
+      lines.push('');
+      tokens.spacing.forEach(t => lines.push(`  --wp--preset--spacing--${t.slug}: ${t.value};`));
+      lines.push('');
+      tokens.shadows.forEach(t => lines.push(`  --wp--preset--shadow--${t.slug}: ${t.value};`));
+      lines.push('}');
+      return `<span style="color:#6b6b6b">${lines.join('\n')}</span>`;
+    }
+
+    function syntaxHighlight(json) {
+      return json
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+          let c = 'code-num';
+          if (/^"/.test(m)) c = /:$/.test(m) ? 'code-key' : 'code-str';
+          return `<span class="${c}">${m}</span>`;
+        });
+    }
+
+    // ─── TABS ─────────────────────────────────────────────────────────────────────
+    function switchMainTab(tab) {
+      activeMainTab = tab;
+      document.querySelectorAll('.topbar .tab').forEach(t => t.classList.toggle('active', t.textContent.includes(tab === 'preview' ? 'previa' : 'Exportar')));
+      document.getElementById('previewPanel').style.display = tab === 'preview' ? 'flex' : 'none';
+      document.getElementById('outputPanel').style.display = tab === 'output' ? 'flex' : 'none';
+      if (tab === 'output') buildOutput();
+    }
+    function switchOutputTab(tab) {
+      activeOutputTab = tab;
+      document.querySelectorAll('.output-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(tab === 'themejson' ? 'theme' : 'css')));
+      buildOutput();
+    }
+
+    // ─── COPY ─────────────────────────────────────────────────────────────────────
+    function copyOutput() {
+      if (activeMainTab === 'preview') { switchMainTab('output'); setTimeout(() => { copyOutputText(); switchMainTab('preview'); }, 100); return; }
+      copyOutputText();
+    }
+    function copyOutputText() {
+      const text = activeOutputTab === 'themejson'
+        ? JSON.stringify(makeThemeObj(), null, 2)
+        : (() => {
+          const l = [':root {'];
+          tokens.colors.forEach(t => l.push(`  --wp--preset--color--${t.slug}: ${t.value};`)); l.push('');
+          tokens.gradients.forEach(t => l.push(`  --wp--preset--gradient--${t.slug}: ${t.value};`)); l.push('');
+          tokens.fontSizes.forEach(t => l.push(`  --wp--preset--font-size--${t.slug}: ${t.value};`)); l.push('');
+          tokens.spacing.forEach(t => l.push(`  --wp--preset--spacing--${t.slug}: ${t.value};`)); l.push('');
+          tokens.shadows.forEach(t => l.push(`  --wp--preset--shadow--${t.slug}: ${t.value};`));
+          l.push('}'); return l.join('\n');
+        })();
+      navigator.clipboard.writeText(text).then(showToast);
+    }
+    function showToast() {
+      const t = document.getElementById('toast'); t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    // ─── SEARCH & RESET ───────────────────────────────────────────────────────────
+    function filterTokens(q) { buildSidebar(q); }
+    function resetTokens() { tokens = JSON.parse(JSON.stringify(DEFAULT_TOKENS)); openAddForms = {}; buildSidebar(); buildPreview(); }
+
+    // ─── INIT ─────────────────────────────────────────────────────────────────────
+    buildSidebar();
+    buildPreview();
+  </script>
+</body>
+
+</html>
