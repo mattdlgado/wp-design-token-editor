@@ -971,6 +971,18 @@
     let collapsedSections = {};
     let openAddForms = {};
 
+    function saveTokens() {
+      localStorage.setItem('wp_dte_tokens', JSON.stringify(tokens));
+    }
+
+    function loadTokens() {
+      const saved = localStorage.getItem('wp_dte_tokens');
+      if (saved) {
+        try { tokens = JSON.parse(saved); return true; } catch (e) {}
+      }
+      return false;
+    }
+
     // ─── UTILS ────────────────────────────────────────────────────────────────────
     function remToPx(v) { return v.includes('px') ? parseInt(v) : Math.round(parseFloat(v) * 16); }
     function pxToRem(px) { return +(px / 16).toFixed(4); }
@@ -1407,7 +1419,7 @@
     let renderTimer = null;
     function scheduleRender() {
       clearTimeout(renderTimer);
-      renderTimer = setTimeout(() => { buildPreview(); buildOutput(); }, 60);
+      renderTimer = setTimeout(() => { buildPreview(); buildOutput(); saveTokens(); }, 60);
     }
 
     // ─── PREVIEW ─────────────────────────────────────────────────────────────────
@@ -1597,9 +1609,10 @@
 
     // ─── SEARCH & RESET ───────────────────────────────────────────────────────────
     function filterTokens(q) { buildSidebar(q); }
-    function resetTokens() { tokens = JSON.parse(JSON.stringify(DEFAULT_TOKENS)); openAddForms = {}; buildSidebar(); buildPreview(); }
+    function resetTokens() { tokens = JSON.parse(JSON.stringify(DEFAULT_TOKENS)); openAddForms = {}; localStorage.removeItem('wp_dte_tokens'); buildSidebar(); buildPreview(); }
 
     // ─── INIT ─────────────────────────────────────────────────────────────────────
+    loadTokens();
     buildSidebar();
     buildPreview();
   </script>
